@@ -23,7 +23,7 @@ export default () => {
 
   return (
     <>
-      <p>父组件的count：{count}</p>
+      <h4>父组件的count：{count}</h4>
       <Button
         type="primary"
         onClick={() => {
