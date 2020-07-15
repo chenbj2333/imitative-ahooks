@@ -1,13 +1,13 @@
 /**
- * title: Default usage
- * desc: With usePersistFn, function references never change.
+ * title: Default usage 基本用法
+ * desc: With usePersistFn, function references never change. 通过 usePersistFn, 函数引用永远不会变化。
  *
  * title.zh-CN: 基本用法
  * desc.zh-CN: 通过 usePersistFn, 函数引用永远不会变化。
  */
 
 import React, { useState, useCallback, useRef } from 'react';
-import { message } from 'antd';
+import { message, Button } from 'antd';
 import { usePersistFn } from 'imitative-ahooks';
 
 export default () => {
@@ -23,25 +23,23 @@ export default () => {
 
   return (
     <>
-      <button
-        type="button"
+      <p>父组件的count：{count}</p>
+      <Button
+        type="primary"
         onClick={() => {
           setCount(c => c + 1);
         }}
       >
         Add Count
-      </button>
-      <p>
-        You can click the button to see the number of sub-component renderings
-      </p>
+      </Button>
 
       <div style={{ marginTop: 32 }}>
-        <h4>Component with persist function:</h4>
+        <h4>使用持久化函数hook的组件:</h4>
         {/* use persist function, ExpensiveTree component will only render once */}
         <ExpensiveTree showCount={showCountPersistFn} />
       </div>
       <div style={{ marginTop: 32 }}>
-        <h4>Component without persist function:</h4>
+        <h4>仅仅使用useCallback（依赖count）函数的组件:</h4>
         {/* without persist function, ExpensiveTree component will re-render on state change */}
         <ExpensiveTree showCount={showCountCommon} />
       </div>
@@ -51,15 +49,8 @@ export default () => {
 
 // some expensive component with React.memo
 const ExpensiveTree = React.memo<{ [key: string]: any }>(({ showCount }) => {
-  const renderCountRef = useRef(0);
+  const renderCountRef = useRef(-1);
   renderCountRef.current += 1;
 
-  return (
-    <div>
-      <p>Render Count: {renderCountRef.current}</p>
-      <button type="button" onClick={showCount}>
-        showParentCount
-      </button>
-    </div>
-  );
+  return <div>Render Count: {renderCountRef.current}</div>;
 });
